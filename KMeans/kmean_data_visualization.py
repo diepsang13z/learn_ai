@@ -170,7 +170,7 @@ def main():
                             cluster[0] = int(sum_x / count)
                             cluster[1] = int(sum_y / count)
 
-                # Press run button
+                # Press random button
                 if 850 < mouse_x < 1000 and 250 < mouse_y < 300:
                     clusters = []
                     labels = []
