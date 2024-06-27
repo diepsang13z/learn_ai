@@ -20,9 +20,6 @@ def main():
     ra = np.random.randint(low, high, size=14)
     rb = np.random.randint(low, high, size=14)
 
-    # Visualize data
-    plt.plot(ra, rb, 'ro')
-
     # Change row vector to colm vector
     A = np.array([ra]).T
     B = np.array([rb]).T
@@ -40,13 +37,14 @@ def main():
     x = np.array([low, high]).T
     y = x * a + b
 
-    plt.plot(x, y)
-
     # Test predicting data
     x_test = 12
     y_test = x_test * a + b
     print(y_test)
 
+    # Visualize data
+    plt.plot(ra, rb, 'ro')
+    plt.plot(x, y)
     plt.show()
 
 

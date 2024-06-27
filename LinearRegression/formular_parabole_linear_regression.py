@@ -21,9 +21,6 @@ def main():
     ra = np.random.randint(low, high, size=14)
     rb = np.random.randint(low, high, size=14)
 
-    # Visualize data
-    plt.plot(ra, rb, 'ro')
-
     # Change row vector to colm vector
     A = np.array([ra]).T
     B = np.array([rb]).T
@@ -45,13 +42,14 @@ def main():
     x = np.linspace(low, high, 10000)
     y = a * x ** 2 + b * x + c
 
-    plt.plot(x, y)
-
     # Test predicting data
     x_test = 12
     y_test = a * x_test ** 2 + b * x_test + c
     print(y_test)
 
+    # Visualize data
+    plt.plot(ra, rb, 'ro')
+    plt.plot(x, y)
     plt.show()
 
 
