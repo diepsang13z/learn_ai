@@ -17,7 +17,7 @@ def check_grad(
     This function compares the analytical gradient with the numerical gradient approximation
     to ensure that the gradient function is correctly implemented. Else print a WARNING alert.
 
-    formular:
+    Formular:
         f(x) = approximately (f(x - epsilon) - f(x + epsilon)) / 2 * epsilon
 
     Args:
@@ -84,7 +84,7 @@ def gradient_descent(
     def grad(x: np.ndarray) -> np.ndarray:
         """Calculates the gradient of the cost function.
 
-        formular: 1/m * A.T |Ax - b|
+        Formular: 1/m * A.T |Ax - b|
 
         Args:
             x (np.ndarray): Current parameter values.
