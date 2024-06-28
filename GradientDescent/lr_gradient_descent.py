@@ -12,14 +12,18 @@ def check_grad(
     cost: Callable[[np.ndarray], float],
     grad: Callable[[np.ndarray], np.ndarray],
 ) -> None:
-    """ Check grad function based on formular:
-        gradient(x) approximately (f(x - epsilon) - f(x + epsilon)) / 2 * epsilon
+    """Checks the correctness of the gradient function using numerical approximation.
+
+    This function compares the analytical gradient with the numerical gradient approximation
+    to ensure that the gradient function is correctly implemented. Else print a WARNING alert.
+
+    formular:
+        f(x) = approximately (f(x - epsilon) - f(x + epsilon)) / 2 * epsilon
 
     Args:
-        x (np.ndarray): Point coordinates to be calculated
-        cost (Callable[[np.ndarray], float]): Function to optimize
-        grad (Callable[[np.ndarray], np.ndarray]): Function to calculate gradient of cost
-        n_point (int): Number of point data
+        x (np.ndarray): Point coordinates at which to evaluate the gradients.
+        cost (Callable[[np.ndarray], float]): Function that computes the cost value.
+        grad (Callable[[np.ndarray], np.ndarray]): Function that computes the analytical gradient of the cost function.
     """
     eps = 1e-4  # 0.001
     g_approximately = np.zeros_like(x)
@@ -44,11 +48,50 @@ def gradient_descent(
     learning_rate: float,
     iteration: int,
 ) -> Tuple[List[np.ndarray], List[int], List[float]]:
+    """ Performs gradient descent to minimize the cost function for linear regression.
+
+    Formular:
+        x0 -> x0 - learning_rate * f'(x0)
+
+    Args:
+        x_init (np.ndarray): Initial guess for the parameters (x0).
+        point_coordinates (Tuple[np.ndarray, np.ndarray]):
+            A tuple containing two arrays: the first array consists of the input features (x1, x2, x3, ...),
+            and the second array consists of the corresponding target values (y1, y2, y3, ...).
+        learning_rate (float): The step size for each iteration of gradient descent.
+        iteration (int): The maximum number of iterations to perform.
+
+    Returns:
+        Tuple[List[np.ndarray], List[int], List[float]]:
+            - List of np.ndarray: The parameter values after each iteration.
+            - List of int: The iteration numbers.
+            - List of float: The cost function values after each iteration.
+    """
 
     def cost(x: np.ndarray) -> float:
+        """Calculates the cost function for linear regression.
+
+        Formular: m/2 * |Ax - b|^2
+
+        Args:
+            x (np.ndarray): Current parameter values.
+
+        Returns:
+            float: The value of the cost function.
+        """
         return .5 / n_point * np.linalg.norm(A.dot(x) - B, 2) ** 2
 
     def grad(x: np.ndarray) -> np.ndarray:
+        """Calculates the gradient of the cost function.
+
+        formular: 1/m * A.T |Ax - b|
+
+        Args:
+            x (np.ndarray): Current parameter values.
+
+        Returns:
+            np.ndarray: The gradient of the cost function.
+        """
         return 1 / n_point * A.T.dot(A.dot(x) - B)
 
     x_list = [x_init]
