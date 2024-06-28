@@ -9,8 +9,8 @@ from sklearn.metrics import accuracy_score
 def main():
     digit = datasets.load_digits()
 
-    digit_X = digit.data  # petal length, petal width, sepal length, sepal width, label
-    digit_y = digit.target  # labels
+    digit_X = digit.data
+    digit_y = digit.target
 
     k = 10
     training_set_size = int(len(digit_X) * 80 / 100)
