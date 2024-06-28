@@ -40,7 +40,7 @@ def check_grad(
 
 def gradient_descent(
     x_init: np.ndarray,
-    points: Tuple[np.ndarray, np.ndarray],
+    point_coordinates: Tuple[np.ndarray, np.ndarray],
     learning_rate: float,
     iteration: int,
 ) -> Tuple[List[np.ndarray], List[int], List[float]]:
@@ -52,7 +52,7 @@ def gradient_descent(
         return 1 / n_point * A.T.dot(A.dot(x) - B)
 
     x_list = [x_init]
-    A, B = points
+    A, B = point_coordinates
     n_point = A.shape[0]
 
     check_grad(x_init, cost, grad)
@@ -60,7 +60,7 @@ def gradient_descent(
     for _ in range(iteration):
         x_next = x_list[-1] - learning_rate * grad(x_list[-1])
 
-        if np.linalg.norm(grad(x_next)) / n_point < 0.3:
+        if np.linalg.norm(grad(x_next)) / n_point < 1e-5:
             break
 
         x_list.append(x_next)
@@ -91,7 +91,6 @@ def main():
     lr.fit(A, B)
 
     x0_gd = np.linspace(1, 46, 2)
-    print(x0_gd)
     y0_sklearn = lr.intercept_[0] + lr.coef_[0][0] * x0_gd
 
     plt.plot(x0_gd, y0_sklearn, color='green')
@@ -102,7 +101,7 @@ def main():
 
     # Random initial line
     x_init = np.array([[1.], [2.]])
-    y0_init = x_init[0][0] + x_init[1][0] * x0_gd
+    y0_init = x_init[0][0] * x0_gd + x_init[1][0]
 
     plt.plot(x0_gd, y0_init, color='black')
 
@@ -115,12 +114,12 @@ def main():
 
     def update(i):
         x = x_list[i]
-        y0_gd = x[0] * x0_gd + x[1]
+        y0_gd = x[0][0] * x0_gd + x[1][0]
         line.set_data(x0_gd, y0_gd)
         return line,
 
     iters = np.arange(1, len(x_list), 1)
-    _ = animation.FuncAnimation(
+    line_animation = animation.FuncAnimation(
         fig1, update, iters, interval=50, blit=True)
 
     # Show all created line by gradient descent
