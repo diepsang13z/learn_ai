@@ -12,6 +12,14 @@ def main():
     iris_X = iris.data  # petal length, petal width, sepal length, sepal width, label
     iris_y = iris.target  # labels
 
+    # Shuffle data by index
+    rand_index = np.arange(iris_X.shape[0])
+    np.random.shuffle(rand_index)
+
+    iris_X = iris_X[rand_index]
+    iris_y = iris_y[rand_index]
+
+    # Using KNN
     X_tran, X_test, y_tran, y_test = train_test_split(
         iris_X, iris_y, train_size=50)
 
