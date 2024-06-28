@@ -1,5 +1,7 @@
 import numpy as np
+
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 
 from sklearn import linear_model
 from typing import Callable, List, Tuple
@@ -21,7 +23,6 @@ def check_grad(
     """
     eps = 1e-4  # 0.001
     g_approximately = np.zeros_like(x)
-    print(x)
     for i in range(len(x)):
         x1 = x.copy()
         x2 = x.copy()
@@ -75,10 +76,9 @@ def gradient_descent(
 
 
 def main():
-
     # Visualize linear regression usign gradient descent
-    plt.figure('Gradient descent for Linear Regression')
-    plt.axes(xlim=(-10, 60), ylim=(-1, 20))
+    fig1 = plt.figure('Gradient descent for Linear Regression')
+    ax = plt.axes(xlim=(-10, 60), ylim=(-1, 20))
 
     # Init data
     A = np.array([[2, 9, 7, 9, 11, 16, 25, 23, 22, 29, 29, 35, 37, 40, 46]]).T
@@ -91,6 +91,7 @@ def main():
     lr.fit(A, B)
 
     x0_gd = np.linspace(1, 46, 2)
+    print(x0_gd)
     y0_sklearn = lr.intercept_[0] + lr.coef_[0][0] * x0_gd
 
     plt.plot(x0_gd, y0_sklearn, color='green')
@@ -109,10 +110,32 @@ def main():
     x_list, iter_list, cost_list = gradient_descent(
         x_init, (A, B), learning_rate=0.0001, iteration=100)
 
-    for x in x_list:
-        y0_gd = x[0] * x0_gd + x[1]
+    # Make animation for line in gradient descent
+    line, = ax.plot([], [], color='blue')
 
-        plt.plot(x0_gd, y0_gd, color='black')
+    def update(i):
+        x = x_list[i]
+        y0_gd = x[0] * x0_gd + x[1]
+        line.set_data(x0_gd, y0_gd)
+        return line,
+
+    iters = np.arange(1, len(x_list), 1)
+    _ = animation.FuncAnimation(
+        fig1, update, iters, interval=50, blit=True)
+
+    # Show all created line by gradient descent
+    for x in x_list:
+        y0_gd = x[0][0] * x0_gd + x[1][0]
+        plt.plot(x0_gd, y0_gd, color='black', alpha=0.2)
+
+    # Legend for plot
+    plt.title('Gradient Descent Animation')
+    plt.legend((
+        'Points',
+        'Solution by formular',
+        'Random line'
+    ), loc=(0.60, 0.01))
+    _ = plt.gca().get_legend().get_texts()
 
     plt.show()
 
